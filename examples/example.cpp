@@ -1,61 +1,29 @@
-#include <filesystem>
+#include <arg_parser/ArgParser.hpp>
 #include <iostream>
-#include <sstream>
-#include <string>
-#include <vector>
 
 using namespace std;
 
-struct Args {
-  string path;
-  bool showHelp{false};
-  vector<string> error;
-};
-
-Args parseArgs(int argc, char *argv[]);
-void showHelpMessage();
-
 int main(int argc, char *argv[]) {
-  const auto [path, showHelp, error] = parseArgs(argc, argv);
+  ArgParser parser("ArgParser-example", "This is description for the program.");
+  parser.addPositionalArgument("INPUT",
+                               "Some positional input for the example");
+  parser.addPositionalArgument("OUTPUT",
+                               "Some positional output for the example");
+  parser.addHelpOption();
+  parser.addVersionOption();
+  ArgOption anArg({"-f", "--file"}, "Some argument that expects input", "file");
+  parser.addOption(anArg);
+  ArgOption veryLong(
+      {"-l", "--longer"},
+      "This is an option to represent really long and verbose descriptions, it "
+      "serves as an example and test for wrapText from TextProcessing.");
+  parser.addOption(veryLong);
+  ArgOption noSpaces({"-L", "--longer2"},
+                     "WhatHappensIfThereAreNoBrakesForTheDescription?"
+                     "WrapTextShouldJustWrapWhenTheLimitIsReached");
+  parser.addOption(noSpaces);
 
-  if (!error.empty()) {
-    cerr << "Unkown option: " << error[0] << endl;
-    showHelpMessage();
-    return 1;
-  }
-  if (showHelp) {
-    showHelpMessage();
-    return 0;
-  }
+  parser.showHelp();
 
   return 0;
-}
-
-void showHelpMessage() {
-  cout << "Usage:\n"
-          "  example [OPTIONS] [INPUT]\n\n"
-
-          "  This can be used to demonstrate project features.\n"
-
-          "Input:\n"
-          "  Some posicional input for the example \n\n"
-
-          "Options:\n"
-          "  -h, --help         Show help.\n"
-          "  TODO: add remaining options.\n";
-}
-
-Args parseArgs(int argc, char *argv[]) {
-  Args args;
-  for (int i = 0; i < argc; i++) {
-    const auto arg = string(argv[i]);
-    if (arg == "-h" || arg == "--help") {
-      args.showHelp = true;
-    } else if (arg[0] == '-') {
-      args.error.push_back(arg);
-    } else {
-      args.path = arg;
-    }
-  }
-  return args;
 }

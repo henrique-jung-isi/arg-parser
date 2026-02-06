@@ -1,19 +1,16 @@
 cmake_minimum_required(VERSION 3.8)
 
-project(PROJECT_NAME_HERE LANGUAGES CXX)
-
+project(arg_parser LANGUAGES CXX)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # ================== Sources ==================
-# choose one:
-add_executable(
-    ${PROJECT_NAME}
-    # add sources here
-)
 
 add_library(
     ${PROJECT_NAME}
     SHARED
-    # add sources here
+        src/ArgParser.cpp
+        src/ArgOption.cpp
+        src/TextProcessing.cpp
 )
 
 # ================== Headers ==================
@@ -25,11 +22,11 @@ target_include_directories(
 )
 
 # ================== Dependecies ==================
-target_link_libraries(
-    ${PROJECT_NAME}
-    PUBLIC
-    # add dependencies here
-)
+# target_link_libraries(
+#     ${PROJECT_NAME}
+#     PUBLIC
+#     # add dependencies here
+# )
 
 # ================== Strip outputs if in release ==================
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
