@@ -55,13 +55,13 @@ std::string TextProcessing::wrapText(const std::string &option,
       assert((leftColumn + emptyString + rightColumn).size() <= lineLength);
 
       text += leftColumn + emptyString + rightColumn + '\n';
-      current = 1;
+      current = 0;
       lastBreakable = -1;
       lineStart = nextLineStart;
       if (lineStart < total && ::isspace(description.at(lineStart))) {
         lineStart++; // don't start a line with a space
       }
-      i = lineStart;
+      i = lineStart - 1;
     }
   }
 
