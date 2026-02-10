@@ -1,27 +1,28 @@
 #include "ArgOption.hpp"
+#include "TextProcessing.hpp"
 #include <ostream>
 #include <sstream>
 ArgOption::ArgOption(const std::string &argument,
                      const std::string &description,
                      const std::string &valueName,
-                     const std::string &defaultValue)
-    : ArgOption{{argument}, description, valueName, defaultValue} {}
+                     const std::vector<std::string> &defaultValues)
+    : ArgOption{{argument}, description, valueName, defaultValues} {}
 
 ArgOption::ArgOption(const std::vector<std::string> &arguments,
                      const std::string &description,
                      const std::string &valueName,
-                     const std::string &defaultValue)
+                     const std::vector<std::string> &defaultValues)
     : _arguments{arguments}, _description{description}, _valueName{valueName},
-      _defaultValue{defaultValue} {}
+      _defaultValues{defaultValues} {}
 
 ArgOption::ArgOption(const std::initializer_list<std::string> &arguments,
                      const std::string &description,
                      const std::string &valueName,
-                     const std::string &defaultValue)
+                     const std::vector<std::string> &defaultValues)
     : ArgOption{std::vector<std::string>{arguments},
                 description,
                 valueName,
-                defaultValue} {}
+                defaultValues} {}
 
 const std::vector<std::string> &ArgOption::arguments() const {
   return _arguments;
@@ -45,19 +46,14 @@ const std::string &ArgOption::description() const { return _description; }
 
 const std::string &ArgOption::valueName() const { return _valueName; }
 
-const std::string &ArgOption::defaultValue() const { return _defaultValue; }
+const std::vector<std::string> &ArgOption::defaultValues() const {
+  return _defaultValues;
+}
 
 std::ostream &operator<<(std::ostream &os, const ArgOption &option) {
-  std::string text = "ArgOption(arguments: [";
-  for (const auto &arg : option._arguments) {
-    text += "\"" + arg + "\", ";
-  }
-  if (!option._arguments.empty()) {
-    text.erase(text.size() - 2);
-  }
-  text += "], description: \"" + option._description + "\"";
-  text += ", valueName: \"" + option._valueName + "\"";
-  text += ", defaultValue: \"" + option._defaultValue + "\")";
-  os << text;
+  os << "ArgOption(arguments: " << option._arguments;
+  os << ", description: \"" << option._description + "\"";
+  os << ", valueName: \"" << option._valueName + "\"";
+  os << ", defaultValue: " << option._defaultValues << ")";
   return os;
 }

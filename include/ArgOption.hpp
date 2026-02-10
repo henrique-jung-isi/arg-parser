@@ -7,19 +7,19 @@ class ArgOption {
 public:
   ArgOption(const std::string &argument, const std::string &description,
             const std::string &valueName = "",
-            const std::string &defaultValue = "");
+            const std::vector<std::string> &defaultValues = {});
   ArgOption(const std::initializer_list<std::string> &arguments,
             const std::string &description, const std::string &valueName = "",
-            const std::string &defaultValue = "");
+            const std::vector<std::string> &defaultValues = {});
   ArgOption(const std::vector<std::string> &arguments,
             const std::string &description, const std::string &valueName = "",
-            const std::string &defaultValue = "");
+            const std::vector<std::string> &defaultValues = {});
 
   const std::vector<std::string> &arguments() const;
   std::string argumentsDisplayText() const;
   const std::string &description() const;
   const std::string &valueName() const;
-  const std::string &defaultValue() const;
+  const std::vector<std::string> &defaultValues() const;
 
   friend std::ostream &operator<<(std::ostream &os, const ArgOption &option);
 
@@ -30,5 +30,5 @@ private:
   std::vector<std::string> _arguments;
   std::string _description;
   std::string _valueName;
-  std::string _defaultValue;
+  std::vector<std::string> _defaultValues;
 };
