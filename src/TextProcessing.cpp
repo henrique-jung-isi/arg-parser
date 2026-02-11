@@ -1,4 +1,5 @@
 #include "TextProcessing.hpp"
+#include <algorithm>
 #include <cassert>
 
 std::string TextProcessing::sectionFrom(const std::string &target,
@@ -10,19 +11,19 @@ std::string TextProcessing::sectionFrom(const std::string &target,
 }
 
 std::string TextProcessing::wrapText(const std::string &option,
-                                     size_t maximumWidth,
+                                     std::size_t maximumWidth,
                                      const std::string &description) const {
   maximumWidth = std::min(
       maximumLeftLength - spacing.size() - indentation.size(), maximumWidth);
-  size_t optionIndex = 0;
+  std::size_t optionIndex = 0;
   std::string text;
-  size_t lineStart = 0;
+  std::size_t lineStart = 0;
   int lastBreakable = -1;
   const auto &max = rightColumnSize(maximumWidth);
-  size_t current = 0;
+  std::size_t current = 0;
   const auto total = description.size();
 
-  for (size_t i = 0; i < total; i++) {
+  for (std::size_t i = 0; i < total; i++) {
     current++;
     const auto &c = description.at(i);
     if (::isspace(c)) {
@@ -55,13 +56,13 @@ std::string TextProcessing::wrapText(const std::string &option,
       assert((leftColumn + emptyString + rightColumn).size() <= lineLength);
 
       text += leftColumn + emptyString + rightColumn + '\n';
-      current = 1;
+      current = 0;
       lastBreakable = -1;
       lineStart = nextLineStart;
       if (lineStart < total && ::isspace(description.at(lineStart))) {
         lineStart++; // don't start a line with a space
       }
-      i = lineStart;
+      i = lineStart - 1;
     }
   }
 
@@ -71,6 +72,7 @@ std::string TextProcessing::wrapText(const std::string &option,
   return text;
 }
 
-size_t TextProcessing::rightColumnSize(const size_t &maximumWidth) const {
+std::size_t
+TextProcessing::rightColumnSize(const std::size_t &maximumWidth) const {
   return lineLength - indentation.size() - maximumWidth - spacing.size();
 }

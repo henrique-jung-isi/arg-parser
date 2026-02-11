@@ -9,6 +9,14 @@
             "args": [
                 // Add arguments to the example here
                 "-h",
+                "-f",
+                "~/file",
+                "-L",
+                "inputArg",
+                "outputArg",
+                "-l",
+                "-s",
+                "150",
             ],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
