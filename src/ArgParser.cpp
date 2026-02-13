@@ -193,7 +193,8 @@ ArgParser::makeSectionText(const std::vector<std::string> &argsText,
   return text;
 }
 
-bool ArgParser::addParsedOption(const std::string &option) { //
+bool ArgParser::addParsedOption(const std::string &option) {
+  // TODO: option to parse arguments in the form --arg=value
   auto it = _optionPos.find(option);
   if (it == _optionPos.end()) {
     _uknownValues.push_back(option);
@@ -206,7 +207,8 @@ bool ArgParser::addParsedOption(const std::string &option) { //
 
 void ArgParser::parseOption(std::vector<std::string>::const_iterator &it,
                             std::vector<std::string>::const_iterator end) {
-  if (!addParsedOption(*it)) return; // TODO: unkown argument passed
+  // TODO: unkown argument passed
+  if (!addParsedOption(*it)) return;
 
   const auto &position = _optionPos[*it];
   const auto &option = _options[position];
