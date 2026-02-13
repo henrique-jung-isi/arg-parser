@@ -3,12 +3,13 @@
     "configurations": [
         {
             "name": "(gdb) Launch",
+            "preLaunchTask": "CMake: build",
             "type": "cppdbg",
             "request": "launch",
             "program": "${command:cmake.launchTargetPath}",
             "args": [
                 // Add arguments to the example here
-                "-h",
+                // "-h",
                 "-f",
                 "~/file",
                 "-L",

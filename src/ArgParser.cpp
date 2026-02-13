@@ -164,11 +164,6 @@ const std::vector<std::string> &ArgParser::positionalValues() const {
   return _positionalValues;
 }
 
-const std::unordered_map<size_t, std::vector<std::string>> &
-ArgParser::values() const {
-  return _values;
-}
-
 const std::vector<ArgOption> &ArgParser::availableOptions() const {
   return _options;
 }
@@ -222,10 +217,4 @@ void ArgParser::parseOption(std::vector<std::string>::const_iterator &it,
   } else {
     // TODO: value not passed with option that requires it
   }
-}
-template <> int ArgParser::typedValue(const std::string &option) const {
-  return std::stoi(value(option));
-}
-template <> std::string ArgParser::typedValue(const std::string &option) const {
-  return value(option);
 }

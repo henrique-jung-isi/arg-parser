@@ -3,13 +3,21 @@
 #include "ArgOption.hpp"
 #include "TextProcessing.hpp"
 #include <iostream>
+#include <sstream>
 #include <string>
 #include <unordered_map>
 #include <vector>
 class ArgParser {
+  template <class T>
+  using if_convertible = std::enable_if_t<
+      std::is_arithmetic_v<T> || std::is_same_v<T, std::string>, bool>;
+  template <class T>
+  using if_string = std::enable_if_t<std::is_same_v<T, std::string>, bool>;
+  template <class T>
+  using if_arithmetic = std::enable_if_t<std::is_arithmetic_v<T>, bool>;
+
 public:
   ArgParser(const TextProcessing &textProcessing = {});
-
   void addPositionalArgument(const std::string &name,
                              const std::string &description = "");
   bool addOption(const ArgOption &option);
@@ -24,18 +32,20 @@ public:
 
   const std::vector<std::string> &values(const std::string &option) const;
   const std::vector<std::string> &values(const ArgOption &option) const;
+
   const std::string &value(const std::string &option) const;
   const std::string &value(const ArgOption &option) const;
 
+  template <class T, if_string<T> = true>
+  T value(const std::string &option) const;
+  template <class T, if_arithmetic<T> = true>
+  T value(const std::string &option) const;
+
+  template <class T, if_convertible<T> = true>
+  T value(const ArgOption &option) const;
+
   const std::vector<std::string> &positionalValues() const;
-  const std::unordered_map<size_t, std::vector<std::string>> &values() const;
   const std::vector<ArgOption> &availableOptions() const;
-
-  template <class T> T typedValue(const ArgOption &option) const {
-    return typedValue<T>(option.arguments().front());
-  }
-
-  template <class T> T typedValue(const std::string &option) const;
 
   std::string programName{};
   std::string description{};
@@ -62,3 +72,20 @@ private:
   std::vector<std::string> _positionalValues{};
   std::vector<std::string> _uknownValues{};
 };
+
+template <class T, ArgParser::if_convertible<T> = true>
+T ArgParser::value(const ArgOption &option) const {
+  return value<T>(option.arguments().front());
+}
+
+template <class T, ArgParser::if_arithmetic<T> = true>
+T ArgParser::value(const std::string &option) const {
+  std::istringstream ss(value(option));
+  T converted;
+  ss >> converted;
+  return converted;
+}
+
+template <> std::string ArgParser::value(const std::string &option) const {
+  return value(option);
+}

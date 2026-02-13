@@ -1,5 +1,6 @@
 #include <arg_parser/ArgParser.hpp>
 #include <iostream>
+#include <sstream>
 
 using namespace std;
 
@@ -35,19 +36,19 @@ int main(int argc, char *argv[]) {
   parser.addOption(sizeOption);
 
   parser.parse(argc, argv);
+  parser.showHelp();
 
   cout << "Debug:\n";
   cout << "Positionals: \n" << parser.positionalValues() << "\n";
-  const auto values = parser.values();
   const auto options = parser.availableOptions();
-  for (const auto &[pos, strings] : values) {
-    cout << options[pos].arguments() << ": " << strings << "\n";
-  }
+
   cout << anArg.arguments() << ": " << parser.value(anArg) << "\n";
   cout << "\n";
 
   cout << sizeOption.arguments() << ": " << parser.value(sizeOption) << "\n";
-  cout << "string: " << parser.typedValue<std::string>(sizeOption) << "\n";
-  cout << "int: " << parser.typedValue<int>(sizeOption) << "\n";
+  cout << "string: " << parser.value<string>(sizeOption) << "\n";
+  cout << "int: " << parser.value<int>(sizeOption) << "\n";
+  cout << "double: " << parser.value<double>(sizeOption) << "\n";
+
   return 0;
 }
