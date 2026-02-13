@@ -7,15 +7,15 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
-class ArgParser {
-  template <class T>
-  using if_convertible = std::enable_if_t<
-      std::is_arithmetic_v<T> || std::is_same_v<T, std::string>, bool>;
-  template <class T>
-  using if_string = std::enable_if_t<std::is_same_v<T, std::string>, bool>;
-  template <class T>
-  using if_arithmetic = std::enable_if_t<std::is_arithmetic_v<T>, bool>;
 
+template <class T>
+concept Number = std::is_arithmetic_v<T>;
+template <class T>
+concept String = std::is_same_v<T, std::string>;
+template <class T>
+concept Convertible = Number<T> || String<T>;
+
+class ArgParser {
 public:
   ArgParser(const TextProcessing &textProcessing = {});
   void addPositionalArgument(const std::string &name,
@@ -36,13 +36,10 @@ public:
   const std::string &value(const std::string &option) const;
   const std::string &value(const ArgOption &option) const;
 
-  template <class T, if_string<T> = true>
-  T value(const std::string &option) const;
-  template <class T, if_arithmetic<T> = true>
-  T value(const std::string &option) const;
+  template <String T> T value(const std::string &option) const;
+  template <Number T> T value(const std::string &option) const;
 
-  template <class T, if_convertible<T> = true>
-  T value(const ArgOption &option) const;
+  template <Convertible T> T value(const ArgOption &option) const;
 
   const std::vector<std::string> &positionalValues() const;
   const std::vector<ArgOption> &availableOptions() const;
@@ -54,8 +51,8 @@ public:
   TextProcessing textProcessing{};
 
 private:
-  std::vector<std::string> makeArgsText(const std::vector<ArgOption> &args,
-                                        size_t &longestLeft) const;
+  static std::vector<std::string>
+  makeArgsText(const std::vector<ArgOption> &args, size_t &longestLeft);
   std::string makeSectionText(const std::vector<std::string> &argsText,
                               const size_t &longestLeft,
                               const std::vector<ArgOption> &args) const;
@@ -73,13 +70,11 @@ private:
   std::vector<std::string> _uknownValues{};
 };
 
-template <class T, ArgParser::if_convertible<T> = true>
-T ArgParser::value(const ArgOption &option) const {
+template <Convertible T> T ArgParser::value(const ArgOption &option) const {
   return value<T>(option.arguments().front());
 }
 
-template <class T, ArgParser::if_arithmetic<T> = true>
-T ArgParser::value(const std::string &option) const {
+template <Number T> T ArgParser::value(const std::string &option) const {
   std::istringstream ss(value(option));
   T converted;
   ss >> converted;

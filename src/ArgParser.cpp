@@ -170,7 +170,7 @@ const std::vector<ArgOption> &ArgParser::availableOptions() const {
 
 std::vector<std::string>
 ArgParser::makeArgsText(const std::vector<ArgOption> &args,
-                        size_t &longestLeft) const {
+                        size_t &longestLeft) {
   std::vector<std::string> all;
   for (const auto &arg : args) {
     std::string text = arg.argumentsDisplayText();
