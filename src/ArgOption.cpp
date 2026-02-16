@@ -28,20 +28,6 @@ const std::vector<std::string> &ArgOption::arguments() const {
   return _arguments;
 }
 
-std::string ArgOption::argumentsDisplayText() const {
-  std::string text;
-  for (const auto &arg : _arguments) {
-    text += arg + ", ";
-  }
-  if (!text.empty()) {
-    text.erase(text.size() - 2);
-  }
-  if (!_valueName.empty()) {
-    text += " " + leftValueSymbol + _valueName + rightValueSymbol;
-  }
-  return text;
-}
-
 const std::string &ArgOption::description() const { return _description; }
 
 const std::string &ArgOption::valueName() const { return _valueName; }
