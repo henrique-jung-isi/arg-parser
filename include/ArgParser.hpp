@@ -15,9 +15,18 @@ concept String = std::is_same_v<T, std::string>;
 template <class T>
 concept Convertible = Number<T> || String<T>;
 
+struct ParserConfig {
+  std::string programName{""};
+  std::string description{""};
+  std::string version{"1.0"};
+  std::string unknownOptionMessage{"Unkown option(s): "};
+  TextProcessing textProcessing{};
+};
+
 class ArgParser {
 public:
-  ArgParser(const TextProcessing &textProcessing = {});
+  ArgParser(const ParserConfig &config = {});
+
   void addPositionalArgument(const std::string &name,
                              const std::string &description = "");
   bool addOption(const ArgOption &option);
@@ -44,15 +53,13 @@ public:
   const std::vector<std::string> &positionalValues() const;
   const std::vector<ArgOption> &availableOptions() const;
 
-  std::string programName{};
-  std::string description{};
-  std::string version{"1.0"};
-  std::string uknownOptionMessage{"Unkown option(s): "};
-  TextProcessing textProcessing{};
+  ParserConfig config;
 
 private:
-  static std::vector<std::string>
-  makeArgsText(const std::vector<ArgOption> &args, size_t &longestLeft);
+  std::vector<std::string> makeArgsText(const std::vector<ArgOption> &args,
+                                        size_t &longestLeft) const;
+
+  std::string optionDisplayText(const ArgOption &option) const;
   std::string makeSectionText(const std::vector<std::string> &argsText,
                               const size_t &longestLeft,
                               const std::vector<ArgOption> &args) const;
@@ -60,14 +67,14 @@ private:
   void parseOption(std::vector<std::string>::const_iterator &it,
                    std::vector<std::string>::const_iterator end);
 
-  std::vector<ArgOption> _positionals{};
   bool _hasHelp{false};
   bool _hasVersion{false};
+  std::vector<ArgOption> _positionalOptions{};
   std::vector<ArgOption> _options{};
-  std::unordered_map<std::string, size_t> _optionPos{};
-  std::unordered_map<size_t, std::vector<std::string>> _values{};
-  std::vector<std::string> _positionalValues{};
-  std::vector<std::string> _uknownValues{};
+  std::unordered_map<std::string, size_t> _optionPosition{};
+  std::unordered_map<size_t, std::vector<std::string>> _parsedOptions{};
+  std::vector<std::string> _parsedPositionals{};
+  std::vector<std::string> _uknownArguments{};
 };
 
 template <Convertible T> T ArgParser::value(const ArgOption &option) const {

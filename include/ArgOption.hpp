@@ -16,15 +16,11 @@ public:
             const std::vector<std::string> &defaultValues = {});
 
   const std::vector<std::string> &arguments() const;
-  std::string argumentsDisplayText() const;
   const std::string &description() const;
   const std::string &valueName() const;
   const std::vector<std::string> &defaultValues() const;
 
   friend std::ostream &operator<<(std::ostream &os, const ArgOption &option);
-
-  std::string leftValueSymbol = "<";
-  std::string rightValueSymbol = ">";
 
 private:
   std::vector<std::string> _arguments;

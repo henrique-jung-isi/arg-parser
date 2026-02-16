@@ -17,15 +17,22 @@ public:
 
   std::string indentation{"  "};
   std::string spacing{"  "};
+  //! must be bigger than TextProcessing::maximumLeftLength
   std::size_t lineLength{80};
+  //! must be smaller than TextProcessing::lineLength
   std::size_t maximumLeftLength{lineLength / 2};
+
+  std::string leftValueSymbol = "<";
+  std::string rightValueSymbol = ">";
 };
 
 template <typename T>
 std::ostream &operator<<(std::ostream &s, const std::vector<T> &v) {
   s.put('[');
-  for (char comma[]{'\0', ' ', '\0'}; const auto &e : v)
-    s << comma << e, comma[0] = ',';
+  for (char comma[]{'\0', ' ', '\0'}; const auto &e : v) {
+    s << comma << e;
+    comma[0] = ',';
+  }
   s.put(']');
   return s;
 }
