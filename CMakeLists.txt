@@ -45,6 +45,7 @@ add_custom_target(
     COMMAND
         ${CMAKE_COMMAND} -E copy_if_different ${headers} ${headersBuildLocation}
     COMMENT "Copying header files to build folder"
+    BYPRODUCTS ${headersBuildLocation}
 )
 
 # ================== Installation directives ==================
