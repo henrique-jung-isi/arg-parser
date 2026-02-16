@@ -5,9 +5,13 @@
 using namespace std;
 
 int main(int argc, char *argv[]) {
-  ArgParser parser;
-  parser.programName = "ArgParser-example";
-  parser.description = "This is the description for the program.";
+  TextProcessing text{.indentation{"  "},
+                      .spacing{"  "},
+                      .lineLength{80},
+                      .maximumLeftLength{35}};
+  ArgParser parser{{.programName = "ArgParser-example",
+                    .description = "This is the description for the program.",
+                    .textProcessing = text}};
 
   parser.addPositionalArgument("INPUT",
                                "Some positional input for the example");
