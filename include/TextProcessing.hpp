@@ -27,7 +27,7 @@ public:
 };
 
 template <typename T>
-std::ostream &operator<<(std::ostream &s, const std::vector<T> &v) {
+inline std::ostream &operator<<(std::ostream &s, const std::vector<T> &v) {
   s.put('[');
   for (char comma[]{'\0', ' ', '\0'}; const auto &e : v) {
     s << comma << e;
