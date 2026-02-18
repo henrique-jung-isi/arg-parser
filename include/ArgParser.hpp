@@ -77,17 +77,19 @@ private:
   std::vector<std::string> _uknownArguments{};
 };
 
-template <Convertible T> T ArgParser::value(const ArgOption &option) const {
+template <Convertible T>
+inline T ArgParser::value(const ArgOption &option) const {
   return value<T>(option.arguments().front());
 }
 
-template <Number T> T ArgParser::value(const std::string &option) const {
+template <Number T> inline T ArgParser::value(const std::string &option) const {
   std::istringstream ss(value(option));
   T converted;
   ss >> converted;
   return converted;
 }
 
-template <> std::string ArgParser::value(const std::string &option) const {
+template <>
+inline std::string ArgParser::value(const std::string &option) const {
   return value(option);
 }

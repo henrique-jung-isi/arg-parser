@@ -1,5 +1,5 @@
-#include "ArgOption.hpp"
-#include "TextProcessing.hpp"
+#include <arg_parser/ArgOption.hpp>
+#include <arg_parser/TextProcessing.hpp>
 #include <ostream>
 #include <sstream>
 ArgOption::ArgOption(const std::string &argument,
