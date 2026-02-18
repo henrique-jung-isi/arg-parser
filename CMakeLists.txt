@@ -35,7 +35,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Release")
 endif()
 
 # Copy headers to build folder so the example works without installing
-file(GLOB headers "${CMAKE_SOURCE_DIR}/include/*")
+file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/include/*")
 set(headersBuildLocation "${CMAKE_BINARY_DIR}/include/${PROJECT_NAME}")
 
 file(COPY ${headers} DESTINATION ${headersBuildLocation})
