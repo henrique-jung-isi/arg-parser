@@ -40,7 +40,7 @@ set(headersBuildLocation "${CMAKE_BINARY_DIR}/include/${PROJECT_NAME}")
 
 file(COPY ${headers} DESTINATION ${headersBuildLocation})
 add_custom_target(
-    copy_headers
+    ${PROJECT_NAME}_copy_headers
     ALL
     COMMAND
         ${CMAKE_COMMAND} -E copy_if_different ${headers} ${headersBuildLocation}
