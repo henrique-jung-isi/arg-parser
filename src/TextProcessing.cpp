@@ -1,5 +1,5 @@
-#include "TextProcessing.hpp"
 #include <algorithm>
+#include <arg_parser/TextProcessing.hpp>
 #include <cassert>
 
 std::string TextProcessing::sectionFrom(const std::string &target,
